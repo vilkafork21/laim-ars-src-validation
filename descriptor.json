@@ -1,0 +1,89 @@
+{
+  "id": "cc825a56-edbd-4bf2-bc78-a895326de5f4",
+  "name": "laim-ars-src-validation",
+  "description": "Версионированная кодовая база проверки качества телеметрии для SberDS и DataLab",
+  "fullDescription": "Нода без входов и настроек. Детерминированно упаковывает единое ядро validation, которое строит актуальный отчёт K1–K7 и диагностический раздел K8. Выходы codebase_validation и checksum_validation используются совместно нодами laim-ars-env-validation-uf и laim-mart-report-batch. Одинаковая кодовая база всегда имеет одинаковый SHA-256; checksum является идентификатором фактически исполненной версии расчёта.",
+  "shortNameToDisplay": "VSRC",
+  "ports": [
+    {
+      "in": false,
+      "name": "codebase_validation",
+      "label": "codebase_validation",
+      "description": "Детерминированный tar.gz ядра validation, закодированный в base64",
+      "type": "default",
+      "shape": "shape_model",
+      "order": 1
+    },
+    {
+      "in": false,
+      "name": "checksum_validation",
+      "label": "checksum_validation",
+      "description": "SHA-256 архива codebase_validation",
+      "type": "default",
+      "shape": "shape_model",
+      "order": 2
+    }
+  ],
+  "script": {
+    "type": "python",
+    "deployType": "docker",
+    "baseImageKey": "py312-simple",
+    "runConfiguration": {
+      "libraryDependencies": [
+        "requirements.txt"
+      ],
+      "sourceFiles": [
+        "main.py",
+        "_package.py",
+        "data/laim-ars-validation/abstract.py",
+        "data/laim-ars-validation/align.py",
+        "data/laim-ars-validation/c2_detector.py",
+        "data/laim-ars-validation/common_core.py",
+        "data/laim-ars-validation/compose.py",
+        "data/laim-ars-validation/core.py",
+        "data/laim-ars-validation/device.py",
+        "data/laim-ars-validation/meta.py",
+        "data/laim-ars-validation/misc.py",
+        "data/laim-ars-validation/perf.py",
+        "data/laim-ars-validation/report.py",
+        "data/laim-ars-validation/rules.py",
+        "data/laim-ars-validation/spec.py",
+        "data/laim-ars-validation/tui.py",
+        "data/laim-ars-validation/tui_core.py",
+        "data/laim-ars-validation/tui_data.py",
+        "data/laim-ars-validation/validation.py",
+        "data/laim-ars-validation/ver.py",
+        "data/laim-ars-validation/viz.py"
+      ],
+      "functionName": "main",
+      "functionParameters": [],
+      "output": {
+        "type": "json",
+        "output": []
+      }
+    }
+  },
+  "ui": {
+    "settings": [],
+    "result": {
+      "title": "Версия кодовой базы",
+      "components": [
+        {
+          "type": "text",
+          "uiComponent": "text",
+          "name": "$.checksum_validation",
+          "parameter": "$.checksum_validation",
+          "label": "SHA-256 ядра validation",
+          "config": {
+            "datasets": [
+              {
+                "value": "$.checksum_validation"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "shape": "other"
+}
